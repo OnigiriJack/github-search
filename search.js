@@ -1,6 +1,6 @@
 window.onload = function () {
     let apiCallCount = 0;
-    let throttled = true;
+    let throttled = false;
     let input = document.querySelector("input");
     let previousInput = input.value;
     let repoList = document.createElement("ul");
@@ -16,7 +16,6 @@ window.onload = function () {
     }, 15000);
 
     window.setInterval(() => {
-
         if (input.value != previousInput && throttled === false) {
             console.log("called" + "previous " + previousInput + " current " + input.value)
             getRepoInfo();
@@ -27,7 +26,6 @@ window.onload = function () {
             document.getElementById("warning").style.display = "block";
         }
         console.log(apiCallCount)
-        console.log("previous " + previousInput + " current " + input.value)
         previousInput = input.value;
     }, 2000)
 
