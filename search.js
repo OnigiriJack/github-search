@@ -27,9 +27,15 @@ window.onload = function () {
         }
         console.log(apiCallCount)
         previousInput = input.value;
-    }, 2000)
+    }, 4000)
 
     getRepoInfo = () => {
+        const ul = document.querySelector("ul");
+
+        while (ul.firstChild) {
+            ul.removeChild(ul.firstChild);
+        }
+
         fetch(`https://api.github.com/search/repositories?q=${input.value}`,
             {
                 headers: {
@@ -38,8 +44,8 @@ window.onload = function () {
             })
             .then(response => response.json())
             .then(data => {
-                //console.log(data)
-                data.items.map(repo => {
+                console.log(data)
+                data.items.slice(0, 10).map(repo => {
                     let repoObj = {
                         url: repo.svn_url,
                         name: repo.name,
