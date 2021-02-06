@@ -12,6 +12,13 @@ window.onload = function () {
     input.oninput = () => {
         output.textContent = input.value;
     }
+
+    GetRepoistoryInfo = () => {
+        fetch("https://api.github.com/search/repositories", { q: "q" })
+            .then(response => response.json())
+            .then(data => console.log(data))
+    }
+    GetRepoistoryInfo()
 }
 
 
