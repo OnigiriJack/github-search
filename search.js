@@ -3,12 +3,13 @@ window.onload = function () {
     let throttled = false;
     let input = document.querySelector("input");
     let previousInput = input.value;
-    let repoList = document.createElement("ul");
-    repoList.className = "repos"
-    let app = document.getElementById("app")
-    app.append(repoList)
+    let repoList = document.createElement("div");
+    repoList.id = "repo-list";
+    repoList.className = "repos";
+    let app = document.getElementById("app");
+    app.append(repoList);
 
-    // every ten seconds reset the throttle
+    // every fifteen seconds reset the throttle
     window.setInterval(() => {
         throttled = false;
         document.getElementById("warning").style.display = "none";
@@ -17,7 +18,6 @@ window.onload = function () {
 
     window.setInterval(() => {
         if (input.value != previousInput && throttled === false) {
-            console.log("called" + "previous " + previousInput + " current " + input.value)
             getRepoInfo();
             apiCallCount++;
         }
@@ -25,13 +25,11 @@ window.onload = function () {
             throttled = true;
             document.getElementById("warning").style.display = "block";
         }
-        console.log(apiCallCount)
         previousInput = input.value;
     }, 4000)
 
     getRepoInfo = () => {
-        const ul = document.querySelector("ul");
-
+        const ul = document.getElementById("repo-list");
         while (ul.firstChild) {
             ul.removeChild(ul.firstChild);
         }
@@ -44,20 +42,23 @@ window.onload = function () {
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 data.items.slice(0, 10).map(repo => {
                     let repoObj = {
                         url: repo.svn_url,
                         name: repo.name,
+                        stars: repo.stargazers_count,
+                        forks: repo.forks
                     }
-                    let repoEl = document.createElement("li");
                     let a = document.createElement("a");
+                    let details = document.createElement("div");
+                    details.className = "repo-item";
+                    details.textContent = `     ⭐️ ${repoObj.stars} ⑂${repoObj.forks}`;
                     a.textContent = `${repoObj.name}`;
-                    a.setAttribute("href", repoObj.url)
-                    repoEl.appendChild(a)
-                    repoList.appendChild(repoEl);
-                })
-            })
+                    a.setAttribute("href", repoObj.url);
+                    details.prepend(a);
+                    repoList.appendChild(details);
+                });
+            });
     }
 }
 
