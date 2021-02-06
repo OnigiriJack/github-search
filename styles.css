@@ -5,3 +5,8 @@
 
 .output {
 }
+
+#warning {
+  color: rgb(167, 14, 14);
+  display: none;
+}
